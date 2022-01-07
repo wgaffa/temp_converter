@@ -76,7 +76,9 @@ mod test {
     }
 
     macro_rules! quick_temp {
-        ($name:ident , $base:ident, $target:ident) => {
+        () => {};
+
+        ($name:ident , $base:ident, $target:ident; $($tail:tt)* ) => {
             quickcheck! {
                 fn $name(input: $base) -> bool {
                     let actual = input.clone();
@@ -86,15 +88,19 @@ mod test {
                     approx_eq!(f64, actual.0, expected.0, ulps = 2, epsilon = 0.01)
                 }
             }
+
+            quick_temp!($($tail)*);
         }
     }
 
     arbitrary_two_point_precision!(Celsius, Fahrenheit, Kelvin);
 
-    quick_temp!(celsius_fahrenheit, Celsius, Fahrenheit);
-    quick_temp!(celsius_kelvin, Celsius, Kelvin);
-    quick_temp!(fahrenheit_celsius, Fahrenheit, Celsius);
-    quick_temp!(fahrenheit_kelvin, Fahrenheit, Kelvin);
-    quick_temp!(kelvin_celsius, Kelvin, Celsius);
-    quick_temp!(kelvin_fahrenheit, Kelvin, Fahrenheit);
+    quick_temp!{
+        celsius_fahrenheit, Celsius, Fahrenheit;
+        celsius_kelvin, Celsius, Kelvin;
+        fahrenheit_celsius, Fahrenheit, Celsius;
+        fahrenheit_kelvin, Fahrenheit, Kelvin;
+        kelvin_celsius, Kelvin, Celsius;
+        kelvin_fahrenheit, Kelvin, Fahrenheit;
+    }
 }
