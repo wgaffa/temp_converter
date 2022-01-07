@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "3.0.5", features = ["cargo"] }
+paste = "1.0.6"
 
 [dev-dependencies]
 float-cmp = "0.9.0"

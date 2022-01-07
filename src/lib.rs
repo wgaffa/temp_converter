@@ -61,6 +61,7 @@ mod test {
 
     use quickcheck::{quickcheck, Arbitrary, Gen};
     use float_cmp::approx_eq;
+    use paste::paste;
 
     macro_rules! arbitrary_two_point_precision {
         ($($i:ident),*) => {
@@ -90,17 +91,33 @@ mod test {
             }
 
             quick_temp!($($tail)*);
+        };
+
+        ($base:ident, $target:ident; $($tail:tt)* ) => {
+            paste! {
+                quickcheck! {
+                    fn [<$base:lower _ to _ $target:lower>](input: $base) -> bool {
+                        let actual = input.clone();
+                        let target: $target = input.into();
+                        let expected: $base = target.into();
+
+                        approx_eq!(f64, actual.0, expected.0, ulps = 2, epsilon = 0.01)
+                    }
+                }
+            }
+
+            quick_temp!($($tail)*);
         }
     }
 
     arbitrary_two_point_precision!(Celsius, Fahrenheit, Kelvin);
 
     quick_temp!{
-        celsius_fahrenheit, Celsius, Fahrenheit;
-        celsius_kelvin, Celsius, Kelvin;
-        fahrenheit_celsius, Fahrenheit, Celsius;
-        fahrenheit_kelvin, Fahrenheit, Kelvin;
-        kelvin_celsius, Kelvin, Celsius;
-        kelvin_fahrenheit, Kelvin, Fahrenheit;
+        Celsius, Fahrenheit;
+        Celsius, Kelvin;
+        Fahrenheit, Celsius;
+        Fahrenheit, Kelvin;
+        Kelvin, Celsius;
+        Kelvin, Fahrenheit;
     }
 }
