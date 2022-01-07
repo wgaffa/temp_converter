@@ -29,23 +29,27 @@ macro_rules! impl_conv {
         }
     };
 
-    ($b:ident, $t:ident, $val:ident => $f:expr) => {
-        impl From<$b> for $t {
-            fn from($val: $b) -> Self {
-                $t($f)
+    ( $($b:ident, $t:ident, $val:ident => $f:expr),* $(,)? ) => {
+        $(
+            impl From<$b> for $t {
+                fn from($val: $b) -> Self {
+                    $t($f)
+                }
             }
-        }
-    }
+        )*
+    };
 }
 
 impl_f64_conv!(Celsius, Fahrenheit, Kelvin);
 
-impl_conv!(Celsius, Fahrenheit, val => val.0 * 9.0/5.0 + 32.0);
-impl_conv!(Celsius, Kelvin, val => val.0 + 273.15);
-impl_conv!(Kelvin, Celsius, val => val.0 - 273.15);
-impl_conv!(Kelvin, Fahrenheit, val => val.0 * 9.0/5.0 - 459.67);
-impl_conv!(Fahrenheit, Celsius, val => (val.0 - 32.0) * 5.0/9.0);
-impl_conv!(Fahrenheit, Kelvin, val => (val.0 + 459.67) * 5.0/9.0);
+impl_conv!{
+    Celsius, Fahrenheit, val => val.0 * 9.0/5.0 + 32.0,
+    Celsius, Kelvin, val => val.0 + 273.15,
+    Kelvin, Celsius, val => val.0 - 273.15,
+    Kelvin, Fahrenheit, val => val.0 * 9.0/5.0 - 459.67,
+    Fahrenheit, Celsius, val => (val.0 - 32.0) * 5.0/9.0,
+    Fahrenheit, Kelvin, val => (val.0 + 459.67) * 5.0/9.0,
+}
 
 #[cfg(test)]
 mod test {
