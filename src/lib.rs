@@ -20,23 +20,27 @@ macro_rules! impl_f64_conv {
 }
 
 macro_rules! impl_conv {
-    ($b:ident, $t:ident => $f:expr) => {
+    () => {};
+
+    ($b:ident, $t:ident => $f:expr, $($tt:tt)*) => {
         impl From<$b> for $t {
             fn from(val: $b) -> Self {
                 let converted = $f;
                 $t(converted(val.0))
             }
         }
+
+        impl_conv!($($tt)*);
     };
 
-    ( $($b:ident, $t:ident, $val:ident => $f:expr),* $(,)? ) => {
-        $(
-            impl From<$b> for $t {
-                fn from($val: $b) -> Self {
-                    $t($f)
-                }
+    ($b:ident, $t:ident, $val:ident => $f:expr, $($tt:tt)* ) => {
+        impl From<$b> for $t {
+            fn from($val: $b) -> Self {
+                $t($f)
             }
-        )*
+        }
+
+        impl_conv!($($tt)*);
     };
 }
 
