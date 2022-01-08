@@ -1,11 +1,11 @@
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Celsius(f64);
+pub struct Celsius(pub f64);
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Fahrenheit(f64);
+pub struct Fahrenheit(pub f64);
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Kelvin(f64);
+pub struct Kelvin(pub f64);
 
 macro_rules! impl_f64_conv {
     ($($t:ident),*) => {
@@ -53,6 +53,13 @@ impl_conv!{
     Kelvin, Fahrenheit, val => val.0 * 9.0/5.0 - 459.67,
     Fahrenheit, Celsius, val => (val.0 - 32.0) * 5.0/9.0,
     Fahrenheit, Kelvin, val => (val.0 + 459.67) * 5.0/9.0,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Temperature {
+    Celsius(Celsius),
+    Fahrenheit(Fahrenheit),
+    Kelvin(Kelvin),
 }
 
 #[cfg(test)]
