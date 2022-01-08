@@ -96,7 +96,7 @@ mod test {
         ($base:ident, $target:ident; $($tail:tt)* ) => {
             paste! {
                 quickcheck! {
-                    fn [<$base:lower _ to _ $target:lower>](input: $base) -> bool {
+                    fn [<$base:lower _to_ $target:lower>](input: $base) -> bool {
                         let actual = input.clone();
                         let target: $target = input.into();
                         let expected: $base = target.into();
