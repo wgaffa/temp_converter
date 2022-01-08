@@ -86,7 +86,7 @@ mod test {
                     let target: $target = input.into();
                     let expected: $base = target.into();
 
-                    approx_eq!(f64, actual.0, expected.0, ulps = 2, epsilon = 0.01)
+                    approx_eq!(f64, actual.0, expected.0, ulps = 2, epsilon = 0.000001)
                 }
             }
 
@@ -101,7 +101,7 @@ mod test {
                         let target: $target = input.into();
                         let expected: $base = target.into();
 
-                        approx_eq!(f64, actual.0, expected.0, ulps = 2, epsilon = 0.01)
+                        approx_eq!(f64, actual.0, expected.0, ulps = 2, epsilon = 0.000001)
                     }
                 }
             }
