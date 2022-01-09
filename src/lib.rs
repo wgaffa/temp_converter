@@ -1,3 +1,5 @@
+use derive_more::Display;
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Celsius(pub f64);
 
@@ -6,6 +8,24 @@ pub struct Fahrenheit(pub f64);
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Kelvin(pub f64);
+
+impl std::fmt::Display for Celsius {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:.2}°C", self.0)
+    }
+}
+
+impl std::fmt::Display for Fahrenheit {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:.2}°F", self.0)
+    }
+}
+
+impl std::fmt::Display for Kelvin {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:.2}°K", self.0)
+    }
+}
 
 macro_rules! impl_f64_conv {
     ($($t:ident),*) => {
@@ -55,7 +75,7 @@ impl_conv!{
     Fahrenheit, Kelvin, val => (val.0 + 459.67) * 5.0/9.0,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
+#[derive(Debug, Clone, Copy, PartialEq, Display)]
 pub enum Temperature {
     Celsius(Celsius),
     Fahrenheit(Fahrenheit),
